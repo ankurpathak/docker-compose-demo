@@ -20,8 +20,10 @@ services:
   mysql:
     image: mysql
     container_name: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
+    #environment:
+    #  - MYSQL_ROOT_PASSWORD=password
+    env_file:
+      - mysql.env
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
@@ -30,8 +32,10 @@ services:
   postgres:
     image: postgres
     container_name: postgres
-    environment:
-      - POSTGRES_PASSWORD=password
+    #environment:
+    #  - POSTGRES_PASSWORD=password
+    env_file:
+      - postgres.env
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -40,14 +44,35 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin
-      - PGADMIN_DEFAULT_PASSWORD=password
-      - PGADMIN_LISTEN_PORT=5050
+    #environment:
+    #  - PGADMIN_DEFAULT_EMAIL=admin
+    #  - PGADMIN_DEFAULT_PASSWORD=password
+    #  - PGADMIN_LISTEN_PORT=5050
+    env_file:
+      - pgadmin.env
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     ports:
       - 5050:5050
+
+  php:
+    image: php:apache
+    container_name: php
+    volumes:
+      - ~/.docker/var/www/html:/var/www/html
+    ports:
+      - 80:80
+
+  jenkins:
+    image: jenkins/jenkins
+    user: root
+    container_name: jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins-data:/var/jenkins_home
+
 
 
 
@@ -65,3 +90,5 @@ volumes:
     name: postgres-data
   pgadmin-data:
     name: pgadmin-data
+  jenkins-data:
+    name: jenkins-data
