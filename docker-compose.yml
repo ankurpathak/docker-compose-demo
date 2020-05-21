@@ -64,7 +64,11 @@ services:
       - 80:80
 
   jenkins:
-    image: jenkins/jenkins
+    build:
+      context: .
+      args:
+        - JENKINS_IMAGE=jenkins/jenkins:jdk11
+    image: ankurpathak/jenkins:jdk11
     user: root
     container_name: jenkins
     ports:
