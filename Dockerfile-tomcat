@@ -1,0 +1,7 @@
+ARG TOMCAT_IMAGE
+FROM ${TOMCAT_IMAGE}
+RUN cp -r /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps/ \
+&& rm -rf /usr/local/tomcat/webapps.dist
+COPY tomcat-users.xml /usr/local/tomcat/conf/
+COPY context.xml /usr/local/tomcat/webapps/host-manager/META-INF/
+COPY context.xml /usr/local/tomcat/webapps/manager/META-INF/
