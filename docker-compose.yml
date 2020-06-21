@@ -64,12 +64,13 @@ services:
       - 80:80
 
   jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile-jenkins
-      args:
-        - JENKINS_IMAGE=jenkins/jenkins:jdk11
-    image: ankurpathak/jenkins:jdk11
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-jenkins
+#      args:
+#        - JENKINS_IMAGE=jenkins/jenkins:jdk11
+#    image: ankurpathak/jenkins:jdk11
+    image: jenkins/jenkins:jdk11
     user: root
     container_name: jenkins
     ports:
@@ -77,6 +78,9 @@ services:
       - 50000:50000
     volumes:
       - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /home/ssguser/.sdkman:/usr/local/sdkman
 
   tomcat:
     build:
@@ -109,13 +113,14 @@ volumes:
   jenkins-data:
     name: jenkins-data
 
-#compose
-# sudo curl -L https://raw.githubusercontent.com/docker/compose/master/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
-#docker
-# sudo curl -L https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
 
-#base=https://raw.githubusercontent.com/docker/machine/master
-#for i in docker-machine-prompt.bash docker-machine-wrapper.bash docker-machine.bash
-#do
-#sudo wget "$base/contrib/completion/bash/${i}" -P /etc/bash_completion.d
-#done
+
+
+#docker
+
+#groupadd -g 999 docker
+#usermod -aG docker jenkins
+
+#https://github.com/Bash-it/bash-it/blob/master/completion/available/sdkman.completion.bash
+
+
