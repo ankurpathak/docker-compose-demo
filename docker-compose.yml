@@ -93,6 +93,13 @@ services:
     ports:
       - 8081:8080
 
+  rabbit:
+    image: rabbitmq:management
+    container_name: rabbit
+    env_file:
+      - rabbit.env
+    ports:
+      - 15672:15672
 
 
 

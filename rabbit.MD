@@ -1,0 +1,17 @@
+#Rabbit
+- Connection - TCP connection between Rabbit-Consumer/Producer
+- Channel - Logical Connection on top of Conncetion
+- Producer - Send messages to Exchange along with Routing Key
+- Consumer - Rabbit pushes messages to Consumer
+- Binding connects an Exchange with a Queue using Binding Key
+- Excahnge - Routes messages to queue comparing Routing Key and Binding Key based
+- Message distribution depends on Exchange Type:
+    - Faneout - Ignores routing key and send messages to all queue it know
+    - Direct - Routes messages to such queue where Routing Key = Binding Key Exactly
+    - Topic - Allows wildcard in Routing Key(red.*) and partial maching with Binding Key(redkey)
+    - Headers - Use Header of Message instead of Routing key to route Messages
+- Default(Nameless) Exchange
+    - Special default exchange for all Queues
+    - Ignores Binding Key
+    - Compares Routing Key with Queue name
+    - Indirectly allows sending Messages directly to Queue
