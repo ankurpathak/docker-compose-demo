@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mongo:
-    image: mongo
+    image: mongo:3.2.21
     container_name: mongo
     volumes:
       - mongo-data:/data/db
@@ -45,13 +45,14 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     #environment:
-    #  - PGADMIN_DEFAULT_EMAIL=admin
+    #  - PGADMIN_DEFAULT_EMAIL=admin@example.com
     #  - PGADMIN_DEFAULT_PASSWORD=password
     #  - PGADMIN_LISTEN_PORT=5050
     env_file:
       - pgadmin.env
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+      - pgadmin-config-data:/root/.pgadmin
     ports:
       - 5050:5050
 
@@ -101,7 +102,32 @@ services:
     ports:
       - 15672:15672
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    env_file:
+      - zookeeper.env
+    ports:
+      - 2181:2181
 
+  kafka:
+    image: confluentinc/cp-kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    env_file:
+      - kafka.env
+    ports:
+      - 9092:9092
+      - 29092:29092
+
+  redisinsight:
+    image: redislabs/redisinsight
+    container_name: redisinsight
+    ports:
+      - 8001:8001
+    volumes:
+      - redisinsight-data:/db
 
 
 volumes:
@@ -117,8 +143,12 @@ volumes:
     name: postgres-data
   pgadmin-data:
     name: pgadmin-data
+  pgadmin-config-data:
+    name: pgadmin-config-data
   jenkins-data:
     name: jenkins-data
+  redisinsight-data:
+    name: redisinsight-data
 
 
 
@@ -129,5 +159,3 @@ volumes:
 #usermod -aG docker jenkins
 
 #https://github.com/Bash-it/bash-it/blob/master/completion/available/sdkman.completion.bash
-
-
