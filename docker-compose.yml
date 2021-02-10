@@ -129,6 +129,31 @@ services:
     volumes:
       - redisinsight-data:/db
 
+  oracle:
+    image: store/oracle/database-enterprise:12.2.0.1
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2-amd64
+    container_name: elasticsearch
+    env_file:
+      - elasticsearch.env
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.9.2
+    container_name: kibana
+    env_file:
+      - kibana.env
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+
 
 volumes:
   mongo-data:
@@ -149,6 +174,9 @@ volumes:
     name: jenkins-data
   redisinsight-data:
     name: redisinsight-data
+  elasticsearch-data:
+    name: elasticsearch-data
+    
 
 
 
@@ -158,4 +186,4 @@ volumes:
 #groupadd -g 999 docker
 #usermod -aG docker jenkins
 
-#https://github.com/Bash-it/bash-it/blob/master/completion/available/sdkman.completion.bash
+#https://github.com/Bash-it/bash-it/blob/master/completion/available/sdkman.completion.bash 
