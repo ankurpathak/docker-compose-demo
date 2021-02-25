@@ -56,13 +56,6 @@ services:
     ports:
       - 5050:5050
 
-  php:
-    image: php:apache
-    container_name: php
-    volumes:
-      - ~/.docker/var/www/html:/var/www/html
-    ports:
-      - 80:80
 
   jenkins:
 #    build:
@@ -153,6 +146,44 @@ services:
     depends_on:
       - elasticsearch
 
+  payara:
+    image: payara/server-full
+    container_name: payara
+    ports:
+      - "8080:8080"
+      - "8181:8181" # HTTPS listener
+      - "4848:4848" # HTTPS admin listener
+      - "9009:9009" # Debug port
+#    environment:
+#    JVM_ARGS: ""
+#     - "AS_ADMIN_MASTERPASSWORD=admin" #default password is `admin`
+    volumes:
+      - ./deployments:/opt/payara/deployments
+
+
+  wildfly:
+    image: jboss/wildfly
+    container_name: wildfly
+    ports:
+      - "8080:8080"
+      - "9990:9990" # admin listener
+    command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+  #    environment:
+  #./add-user.sh admin admin --silent
+    volumes:
+      - ./deployments:/opt/jboss/wildfly/standalone/deployments/
+
+  nexus3:
+    image: sonatype/nexus3
+    container_name: nexus3
+    ports:
+      - 8081:8081
+    volumes:
+      - nexus-data:/nexus-data
+
+
+  #docker run -d -p 8081:8081 --name nexus sonatype/nexus3
+
 
 
 volumes:
@@ -176,6 +207,9 @@ volumes:
     name: redisinsight-data
   elasticsearch-data:
     name: elasticsearch-data
+  nexus-data:
+    name: nexus-data
+    
     
 
 
