@@ -1,1 +1,13 @@
 sys as SYSDABA/Oradoc_db1
+alter session set "_ORACLE_SCRIPT"=true;  
+CREATE USER demo IDENTIFIED BY password;
+
+GRANT CONNECT, CREATE SESSION TO demo;
+
+GRANT ALL PRIVILEGES TO demo;
+
+alter user demo quota unlimited on users;
+
+--default password fro sys is Oradoc_db1
+
+--use docker image ip in sql developer
